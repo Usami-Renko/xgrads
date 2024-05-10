@@ -133,6 +133,7 @@ class CtlDescriptor(object):
         self.totalZCount = 0
         self.zRecLength  = 0
         self.tRecLength  = 0
+        self.fileheader  = 0
         self.byteOrder   = sys.byteorder
         
         if kwargs.get('file'):
@@ -195,6 +196,8 @@ class CtlDescriptor(object):
             elif oneline.lower().startswith('byteswapped'):
                 self.byteOrder  = 'big' \
                     if sys.byteorder == 'little' else 'little'
+            elif oneline.lower().startswith('fileheader'):
+                self.fileheader = int(oneline.split()[1].strip())
             elif oneline.lower().startswith('xdef'):
                 self._processXDef(oneline, fileContent)
             elif oneline.lower().startswith('ydef'):
@@ -496,7 +499,7 @@ class CtlDescriptor(object):
         
         v = CtlVar(fileContent[start])
         v.index =0
-        v.strPos=0
+        v.strPos=self.fileheader
         v.tcount=t
         
         if self.dtype != 'station':
@@ -816,6 +819,7 @@ class CtlDescriptor(object):
             ' cal365Days: ' + str(self.cal365Days)+ '\n'\
             ' sequential: ' + str(self.sequential)+ '\n'\
             '  byteOrder: ' + str(self.byteOrder) + '\n'\
+            ' fileheader: ' + str(self.fileheader)+ '\n'\
             '       xdef: ' + str(self.xdef)      + '\n'\
             '       ydef: ' + str(self.ydef)      + '\n'\
             '       zdef: ' + str(self.zdef)      + '\n'\

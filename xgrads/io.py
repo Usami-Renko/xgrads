@@ -101,8 +101,8 @@ def open_CtlDataset(desfile, returnctl=False, encoding='GBK'):
         Ctl descriptor file if returnctl == True.
     """
     if isinstance(desfile, str):
-        if not desfile.endswith('.ctl'):
-            raise Exception('unsupported file, suffix should be .ctl')
+        # if not desfile.endswith('.ctl'):
+        #     raise Exception('unsupported file, suffix should be .ctl')
 
         ctl = CtlDescriptor(encoding=encoding, file=desfile)
     elif isinstance(desfile, CtlDescriptor):
@@ -162,9 +162,9 @@ def open_CtlDataset(desfile, returnctl=False, encoding='GBK'):
 
     else:
         if ctl.edef == None:
-            expect = ctl.tRecLength * ctl.tdef.length()
+            expect = ctl.tRecLength * ctl.tdef.length() + ctl.fileheader
         else:
-            expect = 0
+            expect = ctl.fileheader
             for ens in ctl.edef:
                 expect += ens.tcount * ctl.tRecLength
         
